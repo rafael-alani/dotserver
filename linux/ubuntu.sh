@@ -12,8 +12,8 @@ set -Eeuo pipefail
 
 readonly DEFAULT_DOTFILES_REPO="git@github.com:rafael-alani/dotfiles.git"
 readonly NVIM_VERSION="0.9.5"
-readonly LV_BRANCH="release-1.4/neovim-0.9"
-readonly LV_INSTALLER_URL="https://raw.githubusercontent.com/LunarVim/LunarVim/${LV_BRANCH}/utils/installer/install.sh"
+readonly LUNARVIM_BRANCH="release-1.4/neovim-0.9"
+readonly LV_INSTALLER_URL="https://raw.githubusercontent.com/LunarVim/LunarVim/${LUNARVIM_BRANCH}/utils/installer/install.sh"
 readonly BOB_INSTALLER_URL="https://raw.githubusercontent.com/MordechaiHadad/bob/master/scripts/install.sh"
 readonly CHEZMOI_INSTALLER_URL="https://get.chezmoi.io"
 readonly STARSHIP_INSTALLER_URL="https://starship.rs/install.sh"
@@ -538,10 +538,10 @@ install_lunarvim() {
     fi
   fi
 
-  info "Installing LunarVim $LV_BRANCH"
+  info "Installing LunarVim $LUNARVIM_BRANCH"
   # Dependencies were installed explicitly above. Avoid LunarVim's pip --user
   # path, which is rejected by newer Ubuntu/Python externally-managed installs.
-  curl -fsSL "$LV_INSTALLER_URL" | LV_BRANCH="$LV_BRANCH" bash -s -- --yes --no-install-dependencies
+  curl -fsSL "$LV_INSTALLER_URL" | env LV_BRANCH="$LUNARVIM_BRANCH" bash -s -- --yes --no-install-dependencies
   hash -r
   command -v lvim >/dev/null 2>&1 || die "LunarVim was installed but lvim is not on PATH."
   success "LunarVim is installed"
