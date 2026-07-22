@@ -143,6 +143,7 @@ install_apt_prerequisites() {
     python3-pynvim \
     ripgrep \
     tar \
+    tmux \
     unzip \
     xz-utils
 
@@ -584,6 +585,22 @@ persist_user_paths() {
   chmod 0644 "$fish_path_file"
 }
 
+configure_ssh_tmux() {
+  local tmux_hook="$HOME/.config/fish/conf.d/10-dotserver-ssh-tmux.fish"
+
+  info "Configuring automatic tmux attachment for SSH logins"
+  mkdir -p "$HOME/.config/fish/conf.d"
+  printf '%s\n' \
+    '# Managed by dotserver/linux/ubuntu.sh' \
+    '# Attach to the persistent main session only for interactive SSH shells.' \
+    'if status is-interactive; and set -q SSH_TTY; and not set -q TMUX' \
+    '    exec tmux new-session -A -s main' \
+    'end' \
+    >"$tmux_hook"
+  chmod 0644 "$tmux_hook"
+  success "Interactive SSH logins will attach to tmux session 'main'"
+}
+
 set_fish_as_default_shell() {
   local fish_path current_shell current_user
   fish_path=$(command -v fish)
@@ -614,8 +631,10 @@ print_summary() {
   printf '  %-12s %s\n' "lunarvim" "$(lvim --version 2>&1 | sed -n '1p')"
   printf '  %-12s %s\n' "lazygit" "$(lazygit --version | sed -n '1p')"
   printf '  %-12s %s\n' "starship" "$(starship --version | sed -n '1p')"
+  printf '  %-12s %s\n' "tmux" "$(tmux -V)"
   printf '  %-12s %s\n' "shell" "$(command -v fish)"
-  printf '\nLog out and back in to start Fish as your login shell. Then run: lvim\n'
+  printf '\nOn the next SSH login, Fish will attach to tmux session main automatically.\n'
+  printf 'Detach and preserve it with Ctrl-b followed by d, or simply disconnect.\n'
 }
 
 main() {
@@ -626,7 +645,7 @@ main() {
 
   printf '\nUbuntu headless workstation bootstrap\n'
   printf 'This installs system build tools, GitHub CLI, chezmoi, Bob + Neovim %s,\n' "$NVIM_VERSION"
-  printf 'LunarVim release 1.4, lazygit, Starship, and Fish.\n\n'
+  printf 'LunarVim release 1.4, lazygit, Starship, Fish, and persistent tmux SSH sessions.\n\n'
 
   DOTFILES_REPO=$(prompt_with_default "Chezmoi dotfiles repository" "$DOTFILES_REPO")
   if ! confirm "Continue with installation?" yes; then
@@ -654,6 +673,7 @@ main() {
   ensure_local_path_for_process
   install_lunarvim
   persist_user_paths
+  configure_ssh_tmux
   set_fish_as_default_shell
   print_summary
 }
