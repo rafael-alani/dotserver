@@ -6,7 +6,7 @@
 #   bash linux/ubuntu.sh
 #
 # Run directly from GitHub:
-#   bash <(curl -fsSL https://raw.githubusercontent.com/rafael-alani/dotserver/main/linux/ubuntu.sh)
+#   bash -c 'curl -fsSL "https://raw.githubusercontent.com/rafael-alani/dotserver/main/linux/ubuntu.sh?nocache=$(date +%s)" | bash'
 
 set -Eeuo pipefail
 
