@@ -143,7 +143,9 @@ install_apt_prerequisites() {
     python3-pynvim \
     ripgrep \
     tar \
+    tldr \
     tmux \
+    tree \
     unzip \
     xz-utils
 
@@ -631,7 +633,9 @@ print_summary() {
   printf '  %-12s %s\n' "lunarvim" "$(lvim --version 2>&1 | sed -n '1p')"
   printf '  %-12s %s\n' "lazygit" "$(lazygit --version | sed -n '1p')"
   printf '  %-12s %s\n' "starship" "$(starship --version | sed -n '1p')"
+  printf '  %-12s %s\n' "tldr" "$(tldr --version 2>&1 | sed -n '1p')"
   printf '  %-12s %s\n' "tmux" "$(tmux -V)"
+  printf '  %-12s %s\n' "tree" "$(tree --version | sed -n '1p')"
   printf '  %-12s %s\n' "shell" "$(command -v fish)"
   printf '\nOn the next SSH login, Fish will attach to tmux session main automatically.\n'
   printf 'Detach and preserve it with Ctrl-b followed by d, or simply disconnect.\n'
