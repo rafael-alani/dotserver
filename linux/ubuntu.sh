@@ -143,7 +143,6 @@ install_apt_prerequisites() {
     python3-pynvim \
     ripgrep \
     tar \
-    tldr \
     tmux \
     tree \
     unzip \
@@ -472,7 +471,7 @@ apply_dotfiles() {
 configure_npm_prefix() {
   info "Configuring user-local npm installs (avoids global EACCES errors)"
   npm config set prefix "$HOME/.local"
-  npm install --global neovim tree-sitter-cli
+  npm install --global neovim tree-sitter-cli tldr
 }
 
 install_bob_and_neovim() {
